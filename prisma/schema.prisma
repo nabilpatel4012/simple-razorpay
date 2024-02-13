@@ -1,0 +1,23 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id          String    @id 
+  entity      String
+  amount      Int
+  amountPaid  Int
+  amountDue   Int
+  currency    String
+  receipt     String
+  status      String
+  attempts    Int
+  createdAt   DateTime
+}
