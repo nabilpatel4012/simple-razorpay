@@ -15,21 +15,21 @@ app.get("/", (req, res) => {
   return res.json({ msg: "hello world!" });
 });
 
-var options = {
-  amount: 500, // amount in the smallest currency unit
-  currency: "INR",
-  receipt: "order_rcptid_11",
-};
-
 app.use(express.json());
 
 app.post("/razorpay", (req, res) => {
   if (req.body.order === "new") {
-    razorpay.orders.create(options, function (err, order) {
-      console.log(order);
-
-      return res.json(order);
-    });
+    razorpay.orders.create(
+      {
+        amount: req.body.amount,
+        currency: req.body.currency,
+        receipt: req.body.receipt,
+      },
+      function (err, order) {
+        console.log(order);
+        return res.json(order);
+      }
+    );
   } else {
     return res.json({ error: "unexpected error occured" });
   }
