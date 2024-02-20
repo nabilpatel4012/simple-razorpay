@@ -10,20 +10,14 @@ const razorpay = new Razorpay({
   key_secret: AccessCreds.keySecret,
 });
 
-app.get("/", (req, res) => {
-  return res.json({ msg: "hello world!" });
-});
-
 app.use(express.json());
 
 app.post("/razorpay", async (req, res) => {
   const billInfo = await fetchAndViewBillInfo(req.body.acctId);
   const amount = parseInt(billInfo.amtDue * 100);
-  console.log(amount);
   const receipt = billInfo.billId;
-  console.log(receipt);
   if (!amount && !receipt) {
-    return res.json({ error: "Error creating response" });
+    return res.status(500).json("Error Creating Order");
   }
   razorpay.orders.create(
     {
@@ -35,9 +29,9 @@ app.post("/razorpay", async (req, res) => {
       if (err) {
         console.log("Error: ", err);
       }
-      console.log(order);
+      console.log("Order Created at: ", Date(Date.now()).toLocaleString());
       client.rpush(RedisDB.redisQueue, JSON.stringify(order));
-      return res.json(order);
+      return res.json(order).status(200);
     }
   );
 });

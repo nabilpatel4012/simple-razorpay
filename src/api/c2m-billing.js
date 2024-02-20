@@ -5,7 +5,6 @@ const fetchAndViewBillInfo = async (acctId) => {
     const request = { acctId: acctId };
     const url = API_ENDPOINTS.getViewBillInfo;
     const response = await axiosCall(request, url);
-    console.log(response);
     return response;
   } catch (error) {
     console.error("Error fetching or processing data:", error);
